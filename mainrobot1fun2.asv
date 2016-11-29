@@ -37,13 +37,23 @@ h1=figure;
 
 % definovanie color mapy 1-pozadie, 2-prekazka, 3-robot, 4-robot s kockou,
 % 5- kocka
-colormaprobot=[1 1 1;0 0 0;0 1 0;1 0 0;0 0 1;1 1 0];
+colormaprobot=[1 1 1;0 0 0;0 1 0;1 0 0;0 0 1;1 1 0;1 1 0];
 mapa=ones(42);
 mapa(1,:)=2;
 mapa(42,:)=2;
 mapa(:,1)=2;
 mapa(:,42)=2;
 
+h2=figure(2);
+
+% definovanie color mapy 1-pozadie, 2-prekazka, 3-robot, 4-robot s kockou,
+% 5- kocka
+colormaprobot=[1 1 1;0 0 0;0 1 0;1 0 0;0 0 1;1 1 0;1 1 0];
+mapa=ones(42);
+mapa(1,:)=2;
+mapa(42,:)=2;
+mapa(:,1)=2;
+mapa(:,42)=2;
 
 % definovanie prekazok
 if pocetprekazok>0
@@ -92,7 +102,7 @@ zoznam(1)=struct('poziciaX',2,'poziciaY',2);
 
 % mapovanie
 global mapovanie
-mapovanie(1:42,1:42)=2;
+mapovanie(1:42,1:42)=0;
 mapovanie(1,:)=1;
 mapovanie(42,:)=1;
 mapovanie(:,1)=1;
@@ -121,15 +131,6 @@ hmapa=image(mapa);
 k=0;
 pocetuloh=0;
 title(['ulozene kocky = ' num2str(pocetuloh)])
-
-h2=figure;
-
-% definovanie color mapy 1-pozadie, 2-prekazka, 3-robot, 4-robot s kockou,
-% 5- kocka
-colormaprobot=[1 1 0;0 0 0;0 1 0;1 0 0;0 0 1;1 1 0];
-colormap(colormaprobot);
-hmapa2=image(mapovanie);
-
 
 % hlavny cyklus
 while k<maxcashladania && pocetuloh~=pocetkociek;
@@ -250,7 +251,7 @@ while k<maxcashladania && pocetuloh~=pocetkociek;
                     roboti(rrob).kocka=2;
                     zindex=zindex-1;
                 else 
-                    [row,col] = find(mapovanie==2);
+                    [row,col] = find(~mapovanie);
                     if isempty(row)==0
                         mapai=1;
                         while(mapa(row(mapai),col(mapai))==2)
@@ -327,11 +328,6 @@ while k<maxcashladania && pocetuloh~=pocetkociek;
         set(hmapa,'CData',mapa)
         roboti(rrob).poziciaX=noveX;
         roboti(rrob).poziciaY=noveY;
-        figure(h2)
-        set(hmapa2,'CData',mapovanie)
-        roboti(rrob).poziciaX=noveX;
-        roboti(rrob).poziciaY=noveY;
-
 
  
         pause(0.002)
