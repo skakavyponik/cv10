@@ -135,7 +135,7 @@ hmapa2=image(mapovanie);
 while k<maxcashladania && pocetuloh~=pocetkociek;
     k=k+1;
     for rrob=1:pocetrobot,
-        
+       
         % vyber pixelov z mapy
         hp=mapa(roboti(rrob).poziciaY,roboti(rrob).poziciaX+1);
         dp=mapa(roboti(rrob).poziciaY+2,roboti(rrob).poziciaX+1);
@@ -220,25 +220,24 @@ while k<maxcashladania && pocetuloh~=pocetkociek;
         end
         
         
-
-        % ak nesie kocku
-        if roboti(rrob).kocka==1
-            jetam=0;
-            [najdenepozkocky]=najdikocku(roboti(rrob),mapa,dosahradaru);
-            if isempty(najdenepozkocky)==0
-                for lol=1:zindex
-                    if((najdenepozkocky(1,2) == zoznam(lol).poziciaX))
-                        if (najdenepozkocky(1,1) == zoznam(lol).poziciaY)
-                            jetam=1;
-                        end
+        jetam=0;
+        [najdenepozkocky]=najdikocku(roboti(rrob),mapa,dosahradaru);
+        if isempty(najdenepozkocky)==0
+            for lol=1:zindex
+                if((najdenepozkocky(1,2) == zoznam(lol).poziciaX))
+                    if (najdenepozkocky(1,1) == zoznam(lol).poziciaY)
+                        jetam=1;
                     end
                 end
-                if(jetam==0)
-                    zindex=zindex+1;
-                    zoznam(zindex).poziciaX=najdenepozkocky(1,2);
-                    zoznam(zindex).poziciaY=najdenepozkocky(1,1);
-                end
             end
+            if(jetam==0)
+                zindex=zindex+1;
+                zoznam(zindex).poziciaX=najdenepozkocky(1,2);
+                zoznam(zindex).poziciaY=najdenepozkocky(1,1);
+            end
+        end
+        % ak nesie kocku
+        if roboti(rrob).kocka==1
         
             % ak priniesol kocku do ciela
             if noveX==40 && noveY==40
@@ -281,37 +280,27 @@ while k<maxcashladania && pocetuloh~=pocetkociek;
 
         % ak nema kocku prehlada priestor ultrazvukom
         if roboti(rrob).kocka==0
-            [najdenepozkocky]=najdikocku(roboti(rrob),mapa,dosahradaru);
-            
-            % ak najde kocku nastavi ciel na jej poziciu
-            if isempty(najdenepozkocky)==0
-                jetam=0;
-                for lol=1:zindex
-                    if((najdenepozkocky(1,2) == zoznam(lol).poziciaX))
-                        if (najdenepozkocky(1,1) == zoznam(lol).poziciaY)
-                            jetam=1;
-                        end
+            if(zindex>0)
+                    roboti(rrob).cielX=zoznam(zindex).poziciaX;
+                    roboti(rrob).cielY=zoznam(zindex).poziciaY;
+                    roboti(rrob).kocka=2;
+                    zindex=zindex-1;
+            else
+                [row,col] = find(mapovanie==2);
+                if isempty(row)==0
+                    mapai=1;
+                    while(mapa(row(mapai),col(mapai))==2)
+                        mapai=mapai+1;
+                    end
+                    if (mapa(row(mapai),col(mapai))~=2)
+                        roboti(rrob).cielX=col(mapai)-1;
+                        roboti(rrob).cielY=row(mapai)-1;
+                        roboti(rrob).kocka=2;
                     end
                 end
-                if jetam==0
-                    roboti(rrob).cielX=najdenepozkocky(1,2);
-                    roboti(rrob).cielY=najdenepozkocky(1,1);
-                    roboti(rrob).kocka=2;
-                end
-%             else 
-%                 [row,col] = find(~mapovanie);
-%                 if isempty(row)==0
-%                     mapai=1;
-%                     while(mapa(row(mapai),col(mapai)==2))
-%                         mapai=mapai+1;
-%                     end
-%                     if (mapa(row(mapai),col(mapai))~=2)
-%                         roboti(rrob).cielX=(col(mapai));
-%                         roboti(rrob).cielY=(row(mapai));
-%                         roboti(rrob).kocka=2;
-%                     end
-%                 end
+ 
             end
+            
             start=1;
         end
         
@@ -335,10 +324,10 @@ while k<maxcashladania && pocetuloh~=pocetkociek;
 
  
         pause(0.002)
-        rrob
-        roboti(rrob).cielX
-        roboti(rrob).cielY
-        %zindex
+%         rrob
+%         roboti(rrob).cielX
+%         roboti(rrob).cielY
+        zindex
     end
 end
 caszberu=k;
